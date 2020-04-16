@@ -61,7 +61,7 @@ def intercept(data):
 def convert_to_numpy(path):
 
     df = pd.DataFrame(pd.read_csv(path, sep='\t', header=None))
-    length = df.shape[0] - 1 # 去掉最后一行数据，因为该行数据可能是无效数据
+    length = df.shape[0] - 2  # 去掉最后两行数据，因为最后一行数据可能是无效数据(空)，倒数第二行可能不是一个tuple
 
     data = np.zeros(shape=[6, length])
 
