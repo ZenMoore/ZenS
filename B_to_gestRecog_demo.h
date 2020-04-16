@@ -70,11 +70,16 @@ bool getB_from_bluetooth(){
 
             if(first){
                 first = false;
+                count = 0;
                 continue;
             }else{
                 break;
             }
+        }else{
+            first = true;
+            count = 0;
         }
+
     }
     valid_length = j-1;//如果检测到空tuple，为了防止特殊情况，再往后检查一个，如果仍然为空，就返回有效长度
     cout<<"valid length = "<<valid_length<<endl;
