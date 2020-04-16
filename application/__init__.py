@@ -16,14 +16,13 @@ import application.send_to_demo as messenger
 
 model_path = "./model/gr_model.ckpt-26001"
 
-type_map = {0: 'right_to_left',
-            1: 'round',
-            2: 'croix',
-            3: 'down_to_up',
-            4: 'thunder',
-            5: 'infinity',
-            6: 'triangle',
-            7: 'turn'}
+type_map = {0 : 'croix',
+             1 : 'down_to_up',
+            2 : 'right_to_left',
+            3 : 'round',
+            4 : 'thunder',
+            5 : 'triangle',
+            6 : 'turn'}
 
 # todo @author Louise: 将传入的 char[] raw 转换为 float[] 再转换为 float[6][256] 最后转换为 numpy
 # 返回 -1 表示解码失败

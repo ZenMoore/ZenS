@@ -15,6 +15,8 @@ using namespace std;
 #define DATA_RAW_MAX_TIME 400
 //#define DATA_TOTAL_TIME 256
 
+#define DBL 0.01
+
 extern float rec_float[6][400];
 
 float raw[6][DATA_RAW_MAX_TIME] = {0};
@@ -60,7 +62,7 @@ bool getB_from_bluetooth(){
     for(j = 0; j< DATA_RAW_MAX_TIME; j++){
 
         for(int i = 0; i < 6 ; i++){
-            if(raw[i][j] == 0){
+            if(raw[i][j] <= DBL){
                 count++;
             }
         }

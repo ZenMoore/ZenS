@@ -188,16 +188,16 @@ char SerialPort::receive(float rec_float[6][400], float rec_angle[36])
 
 
     //创建一个用于OVERLAPPED的事件处理
-    cout<<"placeholder"<<endl;
+//    cout<<"placeholder"<<endl;
 //    this->send("flush");
     memset(&m_osRead, 0, sizeof(m_osRead));
     m_osRead.hEvent = CreateEvent(NULL, TRUE, FALSE, reinterpret_cast<LPCSTR>(L"ReadEvent"));
 
-    cout<<"placeholder"<<endl;
+//    cout<<"placeholder"<<endl;
     ClearCommError(hCom, &dwErrorFlags, &comStat); //清除通讯错误，获得设备当前状态
-    cout<<"placeholder"<<endl;
+//    cout<<"placeholder"<<endl;
 
-    //如果输入缓冲区字节数为0，则返回false
+    //如果输入缓冲区字节数为0，则返回fals      e
     BOOL bReadStat = ReadFile(hCom, //串口句柄
                                       buf, //数据首地址
                                       wCount, //要读取的数据最大字节数

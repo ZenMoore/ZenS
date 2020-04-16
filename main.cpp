@@ -31,7 +31,7 @@ int main(){
     // 参数initial判断是否为初次启动，如果是，则设置角度angle0以便于计算偏差
     bool initial = true;
 
-    if(w.open("Com7")){
+    if(w.open("Com9")){
         cout<<"com opening succeeds."<<endl;
 
         while(true){
