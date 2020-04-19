@@ -17,12 +17,12 @@ import application.send_to_demo as messenger
 model_path = "./model/gr_model.ckpt-26001"
 
 type_map = {0 : 'croix',
-             1 : 'down_to_up',
-            2 : 'right_to_left',
-            3 : 'round',
-            4 : 'thunder',
-            5 : 'triangle',
-            6 : 'turn'}
+                                   1 : 'down_to_up',
+                                   2 : 'right_to_left',
+                                   3 : 'round',
+                                   4 : 'thunder',
+                                   5 : 'triangle',
+                                   6 : 'turn'}
 
 # todo @author Louise: 将传入的 char[] raw 转换为 float[] 再转换为 float[6][256] 最后转换为 numpy
 # 返回 -1 表示解码失败
@@ -31,7 +31,6 @@ type_map = {0 : 'croix',
 
 
 if __name__ == '__main__':
-
     # 从 C-Python 通信中获取[6, 256]数据并解码
     # data = decode(reveiver.get_mmap_info())
 

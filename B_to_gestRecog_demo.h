@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <time.h>
 
 using namespace std;
 
@@ -180,7 +181,13 @@ bool sendB_to_gestRecog(){
      * 文件方法
      */
 
-    ofstream out(filedir);
+    //todo new dataset
+//    ofstream out(filedir);
+    time_t rawtime;
+    struct tm * timeinfo;
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    ofstream out("D:/ZenS/application/data_gotten/data" + string(asctime(timeinfo)) + ".tsv");
     if(out.fail()){
         cout<<"error\n";
     }

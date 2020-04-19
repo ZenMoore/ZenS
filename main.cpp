@@ -8,6 +8,12 @@
 #include <windows.h>
 #include "SerialPort.h"
 
+#define BUF_SIZE 1025
+
+char szName[] = "shm";
+char *pBuf;
+HANDLE hMapFile;
+
 SerialPort w;
 float rec_float[6][400];
 float rec_angle[36]={0};
@@ -26,6 +32,28 @@ char get_flow(){
     return w.receive(rec_float,rec_angle); //当这个函数内部对rec_float/rec_angle参数进行改变的时候，作为main全局变量的rec_float/rec_angle也被改变
 }
 
+void shm_initial()
+{
+    hMapFile = CreateFileMapping(
+            INVALID_HANDLE_VALUE,    // �����ļ����
+            NULL,                    // Ĭ�ϰ�ȫ����
+            PAGE_READWRITE,          // �ɶ���д
+            0,                       // ��λ�ļ���С
+            BUF_SIZE,                // ��λ�ļ���С
+            szName                   // �����ڴ�����
+    );
+    pBuf = (char *)MapViewOfFile(
+            hMapFile,            // �����ڴ�ľ��
+            FILE_MAP_ALL_ACCESS, // �ɶ�д���
+            0,
+            0,
+            0
+    );
+    for(int i=0;i<=1024;i++)
+        pBuf[i]=0;
+    pBuf[0]='w';
+}
+
 // 主程序，循环运行从单片机获取信息流
 int main(){
     // 参数initial判断是否为初次启动，如果是，则设置角度angle0以便于计算偏差
@@ -33,7 +61,7 @@ int main(){
 
     if(w.open("Com9")){
         cout<<"com opening succeeds."<<endl;
-
+        shm_initial();
         while(true){
             order = get_flow();
             cout<<"parsed."<<endl;
@@ -43,11 +71,11 @@ int main(){
 //                case 'C': Sleep(4000); break;// @author Marc-Antoine
 //                case 'P' : run_none_to_demo(initial); initial = false; break;
                 case 'P':
-                    run_none_to_demo(initial);
+                    run_none_to_demo(initial,pBuf);
                     initial = false;
                     break;
                 case 'A':
-                    run_A_to_demo();
+                    run_A_to_demo(pBuf);
                     break;
                 case 'B'://注意啥时候不返回B了啥时候数据接受完，啥时候才能用rec_float；buf[0]==B, buf[1]==fois
                     //什么也不做，继续接收数据，直到收到'T'——表征B-data各批次发送完毕的字符

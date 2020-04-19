@@ -43,7 +43,7 @@ def intercept(data):
 
         for i in range(up_insert, length+up_insert):# todo test
             for j in range(0, 6):
-                results[j][i] = data[j][i]
+                results[j][i] = data[j][i-up_insert]
 
         # 通过复制最后一行补充尾部
         for i in range(length+up_insert, SEQUENCE_LEN):# todo test

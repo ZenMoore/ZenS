@@ -16,7 +16,8 @@ float void_angle_data[36] = {0};
 // 向Unity3D程序发送'P'作为指令
 // C-C# 进程间通信
 // todo @author Simon
-void send_N_order(){
+void send_N_order(char *pBuf){
+    pBuf[1]='N';
     cout<<"N sent to demo."<<endl;
 }
 
@@ -51,11 +52,23 @@ bool decodeN_data(bool initial){
 //  将角度信息传递到demo中, C-C#通信
 // todo @author Simon
 // todo @author Louise: maybe there shoule be a transfer of float to char[]
-void sendN_to_demo(){
-    for(int i = 0; i<36; i+=3) {
-        cout << "N_order sent." << void_angle_data[i] << ", " << void_angle_data[i + 1] << ", "
-             << void_angle_data[i + 2] << endl;
+void sendN_to_demo(int x,char *pBuf){
+    for(int i=0;i<3;i++){
+        int a[2];
+        a[1]=void_angle_data[x+i];
+        if(a[1]>=0){
+            a[0]=1;
+            if(a[1]>120)
+                a[1]=120;
+        }
+        else{
+            a[0]=2,a[1]=-a[1];
+            if(a[1]<-120)
+                a[1]=120;
+        }
+        pBuf[2+i*2]=a[0],pBuf[2+i*2+1]=a[1];
     }
+    cout << "N_order sent." << void_angle_data[x] << ", " << void_angle_data[x + 1] << ", "<< void_angle_data[x + 2] << endl;
 }
 
 void initializeN(){
@@ -70,14 +83,21 @@ void initializeN(){
 // 3. 获取后续三个角度数据并预处理
 // 4. 将三个处理后角度数据传出至 demo
 // 参数initial判断是否为初次启动，如果是，则设置角度angle0以便于计算偏差
-void run_none_to_demo(bool initial){
+void run_none_to_demo(bool initial,char *pBuf){
     initializeN();
-    send_N_order();
-
     // 用二维数组存储data数据[6, 256]
     if(getN_from_bluetooth()){
         if(decodeN_data(initial)){
-            sendN_to_demo();
+            int i=0;
+            while(1) if(pBuf[0]=='w'){
+                    send_N_order(pBuf);
+                    sendN_to_demo(i,pBuf);
+                    pBuf[0]='r';
+                    cout<<"N to demo finish"<<endl;
+                    i+=3;
+                    if(i>=36)
+                        break;
+                }
         }else{
             cout << "decoding angle failed." << endl;
         }

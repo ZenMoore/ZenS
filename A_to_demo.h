@@ -16,7 +16,8 @@ float A_angle_data[36] = {0};
 // 向Unity3D程序发送'A'作为指令
 // C-C# 进程间通信
 // todo @author Simon
-bool send_A_order(){
+bool send_A_order(char *pBuf){
+    pBuf[1]='A';
     cout<<"A order sent."<<endl;
     return true;
 }
@@ -43,10 +44,23 @@ bool decodeA_data(){
 //  将角度信息传递到demo中, C-C#通信
 // todo @author Simon
 // todo @author Louise: maybe there shoule be a transfer of float to char[]
-void sendA_to_demo(){
-    for(int i = 0; i< 36; i+=3){
-        cout<<"A sent to demo."<< A_angle_data[i]<<", "<<A_angle_data[i+1]<<", "<<A_angle_data[i+2]<<endl;
+void sendA_to_demo(int x,char *pBuf){
+    for(int i=0;i<3;i++){
+        int a[2];
+        a[1]=A_angle_data[x+i];
+        if(a[1]>=0){
+            a[0]=1;
+            if(a[1]>120)
+                a[1]=120;
+        }
+        else{
+            a[0]=2,a[1]=-a[1];
+            if(a[1]<-120)
+                a[1]=120;
+        }
+        pBuf[2+i*2]=a[0],pBuf[2+i*2+1]=a[1];
     }
+    cout<<"A sent to demo."<< A_angle_data[x]<<", "<<A_angle_data[x+1]<<", "<<A_angle_data[x+2]<<endl;
 }
 
 void initializeA(){
@@ -60,14 +74,21 @@ void initializeA(){
 // 2. 发送'A'作为'按钮A指令'至 demo
 // 3. 获取后续三个角度数据并预处理
 // 4. 将三个处理后角度数据传出至 demo
-void run_A_to_demo(){
+void run_A_to_demo(char *pBuf){
     initializeA();
-    send_A_order();
-
     // 用二维数组存储data数据[6, 256]
     if(getA_from_bluetooth()){
         if(decodeA_data()){
-            sendA_to_demo();
+            int i=0;
+            while(1) if(pBuf[0]=='w'){
+                    send_A_order(pBuf);
+                    sendA_to_demo(i,pBuf);
+                    pBuf[0]='r';
+                    cout<<"A to demo finish"<<endl;
+                    i+=3;
+                    if(i>=36)
+                        break;
+                }
         }else{
             cout << "decoding angle failed." << endl;
         }
