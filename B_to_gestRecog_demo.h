@@ -10,6 +10,7 @@
 #include <cstring>
 #include <fstream>
 #include <time.h>
+#include <sstream>
 
 using namespace std;
 
@@ -25,6 +26,8 @@ float raw[6][DATA_RAW_MAX_TIME] = {0};
 int valid_length = DATA_RAW_MAX_TIME; //表示数据的有效长度
 string filedir = "D:/ZenS/application/data_gotten/data.tsv";
 const char* messagedir = "D:/ZenS/application/launcher.temp";
+int pos = 0;
+
 
 // 向Unity3D程序发送‘B’作为指令
 // C-C# 进程间通信
@@ -118,8 +121,8 @@ bool getB_from_bluetooth(){
 // 无法判断操作是否成功
 // 文件方法
 // 将(6, ?)数据传送给python作为一个tsv文件当中
-// todo @author Louise
-//todo @author Noah (把data数组写成excel文件，运行GestRecog程序即可)
+//  @author Louise
+// @author Noah (把data数组写成excel文件，运行GestRecog程序即可)
 bool sendB_to_gestRecog(){
     /*
      * 共享内存方法
@@ -182,17 +185,17 @@ bool sendB_to_gestRecog(){
      */
 
     //todo new dataset
-//    ofstream out(filedir);
-    time_t rawtime;
-    struct tm * timeinfo;
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    ofstream out("D:/ZenS/application/data_gotten/data" + string(asctime(timeinfo)) + ".tsv");
+    string s1 = "D:/ZenS/application/data_gotten/data";
+    string s3 = ".tsv";
+    ostringstream oss;
+    oss << s1 << pos << s3;
+    ofstream out(oss.str());
     if(out.fail()){
         cout<<"error\n";
     }
 //    out<<"myid:"<<myid<<endl;
 //    out<<"procnum:"<<procnum<<endl;
+
 //    for(int i=0; i<valid_length; i++){
 //        out<<data[0][i]<<"\t"<<data[1][i]<<"\t"<<data[2][i]<<"\t"<<data[3][i]<<"\t"<<data[4][i]<<"\t"<<data[5][i]<<endl;
 //    }

@@ -15,7 +15,7 @@ float void_angle_data[36] = {0};
 
 // 向Unity3D程序发送'P'作为指令
 // C-C# 进程间通信
-// todo @author Simon
+//  @author Simon
 void send_N_order(char *pBuf){
     pBuf[1]='N';
     cout<<"N sent to demo."<<endl;
@@ -42,16 +42,22 @@ bool decodeN_data(bool initial){
 
     for(int i = 0; i < 36; i++){
 //        cout<<angle0[i]<<endl;
+//        if((i+1)%3 == 3){
+//            void_angle_raw[i-2] += 10;
+//            void_angle_raw[i-1] += 10;
+//            void_angle_raw[i] += 90;
+//        }
         float deviation = void_angle_raw[i] - angle0[i%3];
         void_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
+        void_angle_data[i] = void_angle_data[i] - 90;  //todo 这里是一个产生负值的映射
+
 //        cout<< void_angle_data[i]<<endl;
     }
     return true;
 }
 
 //  将角度信息传递到demo中, C-C#通信
-// todo @author Simon
-// todo @author Louise: maybe there shoule be a transfer of float to char[]
+//  @author Simon
 void sendN_to_demo(int x,char *pBuf){
     for(int i=0;i<3;i++){
         int a[2];

@@ -15,7 +15,7 @@ float A_angle_data[36] = {0};
 
 // 向Unity3D程序发送'A'作为指令
 // C-C# 进程间通信
-// todo @author Simon
+// @author Simon
 bool send_A_order(char *pBuf){
     pBuf[1]='A';
     cout<<"A order sent."<<endl;
@@ -37,13 +37,13 @@ bool decodeA_data(){
     for(int i = 0; i < 36; i++){
         float deviation = A_angle_raw[i] - angle0[i%3];
         A_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
+        A_angle_data[i] = A_angle_data[i] - 90;  //todo 这里是一个产生负值的映射
     }
     return true;
 }
 
 //  将角度信息传递到demo中, C-C#通信
-// todo @author Simon
-// todo @author Louise: maybe there shoule be a transfer of float to char[]
+// @author Simon
 void sendA_to_demo(int x,char *pBuf){
     for(int i=0;i<3;i++){
         int a[2];
