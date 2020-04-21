@@ -35,9 +35,13 @@ bool getA_from_bluetooth(){
 //将角度归一化到[0, 180]
 bool decodeA_data(){
     for(int i = 0; i < 36; i++){
+        if(i >= 33){
+            A_angle_raw[i] = A_angle_raw[i-3];
+        }
         float deviation = A_angle_raw[i] - angle0[i%3];
-        A_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
-        A_angle_data[i] = A_angle_data[i] - 90;  //todo 这里是一个产生负值的映射
+//        A_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
+        A_angle_data[i] = deviation;
+//        A_angle_data[i] = A_angle_data[i] - 90;  //todo 这里是一个产生负值的映射
     }
     return true;
 }

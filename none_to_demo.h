@@ -47,9 +47,13 @@ bool decodeN_data(bool initial){
 //            void_angle_raw[i-1] += 10;
 //            void_angle_raw[i] += 90;
 //        }
+        if(i >= 33){
+            void_angle_raw[i] = void_angle_raw[i-3];
+        }
         float deviation = void_angle_raw[i] - angle0[i%3];
-        void_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
-        void_angle_data[i] = void_angle_data[i] - 90;  //todo 这里是一个产生负值的映射
+//        void_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
+        void_angle_data[i] = deviation;
+//        void_angle_data[i] = void_angle_data[i] - 90;  //todo 这里是一个产生负值的映射
 
 //        cout<< void_angle_data[i]<<endl;
     }
@@ -95,15 +99,18 @@ void run_none_to_demo(bool initial,char *pBuf){
     if(getN_from_bluetooth()){
         if(decodeN_data(initial)){
             int i=0;
-            while(1) if(pBuf[0]=='w'){
+            while(1) {
+                pBuf[0] = 'w'; //todo dataset
+                if (pBuf[0] == 'w') {
                     send_N_order(pBuf);
-                    sendN_to_demo(i,pBuf);
-                    pBuf[0]='r';
-                    cout<<"N to demo finish"<<endl;
-                    i+=3;
-                    if(i>=36)
+                    sendN_to_demo(i, pBuf);
+                    pBuf[0] = 'r';
+                    cout << "N to demo finish" << endl;
+                    i += 3;
+                    if (i >= 36)
                         break;
                 }
+            }
         }else{
             cout << "decoding angle failed." << endl;
         }

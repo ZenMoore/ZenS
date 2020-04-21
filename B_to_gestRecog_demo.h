@@ -184,7 +184,7 @@ bool sendB_to_gestRecog(){
      * 文件方法
      */
 
-    //todo new dataset
+    //todo dataset
     string s1 = "D:/ZenS/application/data_gotten/data";
     string s3 = ".tsv";
     ostringstream oss;
