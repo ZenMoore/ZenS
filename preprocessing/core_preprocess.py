@@ -11,6 +11,7 @@ FILTER_SIZE = 5
 # 给定一个.xls文件，将其转变为(6, 256)维 numpy 向量
 def convert_to_numpy(data_file):
     book = xlrd.open_workbook('../application/{}'.format(data_file))
+    # book = xlrd.open_workbook('../dataset/original/croix/{}'.format(data_file))
 
     table = book.sheet_by_index(0)  # 这里是引入第一个sheet，默认是引入第一个，要引入别的可以改那个数字
 
@@ -71,3 +72,13 @@ def run_without_file(data):
     data = zero_mean(data)
     data = normalization(data)
     return data
+
+# if __name__ == '__main__':
+#     data = run("0_croix.xlsx")
+#     plt.plot(data[2], color='red')
+#     data = noise_reduction(data)
+#     data = zero_mean(data)
+#     plt.xlabel('Data Number')
+#     plt.ylabel('Multiple of Gravity Acceleration')
+#     plt.plot(data[2], color='blue')
+#     plt.show()

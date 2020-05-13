@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 ORIGINAL_PATH = './data_gotten/'
-DATA_FILE = 'data.tsv'
+DATA_FILE = 'data1.tsv'
 
 SEQUENCE_LEN = 256
 

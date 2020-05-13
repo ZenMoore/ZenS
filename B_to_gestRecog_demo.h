@@ -24,15 +24,16 @@ extern float rec_float[6][400];
 float raw[6][DATA_RAW_MAX_TIME] = {0};
 //float data[6][DATA_TOTAL_TIME] = {0};
 int valid_length = DATA_RAW_MAX_TIME; //表示数据的有效长度
-string filedir = "D:/ZenS/application/data_gotten/data.tsv";
+string filedir = "D:/ZenS/application/data_gotten/data1.tsv";
 const char* messagedir = "D:/ZenS/application/launcher.temp";
-int pos = 0;
-
+extern int pos; //todo dataset
 
 // 向Unity3D程序发送‘B’作为指令
 // C-C# 进程间通信
-// todo @author Simon
-bool send_B_order(){
+// @author Simon
+bool send_B_order(char *pBuf){
+    pBuf[0]='r';
+    pBuf[1]='B';
     cout<<"B sent to gestRecog."<<endl;
     return true;
 }
@@ -45,15 +46,14 @@ bool getB_from_bluetooth(){
     for(int i=0; i<6; i++){
         for(int j=0; j<DATA_RAW_MAX_TIME; j++){
             raw[i][j] = rec_float[i][j];
-            cout<<"column="<<i<<"  row="<<j<<"  data="<<raw[i][j]<<endl;
+//            cout<<"column="<<i<<"  row="<<j<<"  data="<<raw[i][j]<<endl;
         }
     }
     return true;
 }
 
 // 获取数据有效长度
-// @author Marc-Antoine
-// todo @author Noah 根据需要修改算法
+// @author Noah
  bool decodeB_data(){
 
     //计算[6, 400]中的有数据长度
@@ -184,21 +184,25 @@ bool sendB_to_gestRecog(){
      * 文件方法
      */
 
+
     //todo dataset
     string s1 = "D:/ZenS/application/data_gotten/data";
     string s3 = ".tsv";
     ostringstream oss;
     oss << s1 << pos << s3;
+    cout<<pos<<endl;
     ofstream out(oss.str());
+//    dataset end.
+
+    //todo workflow
+//    ofstream out(filedir);
+    //workflow end
+
+
     if(out.fail()){
         cout<<"error\n";
     }
-//    out<<"myid:"<<myid<<endl;
-//    out<<"procnum:"<<procnum<<endl;
 
-//    for(int i=0; i<valid_length; i++){
-//        out<<data[0][i]<<"\t"<<data[1][i]<<"\t"<<data[2][i]<<"\t"<<data[3][i]<<"\t"<<data[4][i]<<"\t"<<data[5][i]<<endl;
-//    }
     for(int i=0; i<valid_length; i++){
         out<<raw[0][i]<<"\t"<<raw[1][i]<<"\t"<<raw[2][i]<<"\t"<<raw[3][i]<<"\t"<<raw[4][i]<<"\t"<<raw[5][i]<<endl;
     }
@@ -228,10 +232,8 @@ void initializeB(){
 // 2. 发送'B'作为'按钮B指令'至demo
 // 3. 解析后续[6, ?]数据数组，并同时进行数据截取
 // 4. 将数组传出至 gestRecog/application/receive_from_host
-void run_B_to_gestRecog_demo(){
+void run_B_to_gestRecog_demo(char *pBuf){
     initializeB();
-    send_B_order();
-
 //    for(int i=0; i<6; i++){
 //        for(int j=0; j<DATA_RAW_MAX_TIME; j++){
 //            cout<<"column="<<i<<"  row="<<j<<"  data="<<rec_float[i][j]<<endl;
@@ -239,15 +241,24 @@ void run_B_to_gestRecog_demo(){
 //    }
     // 用二维数组存储data数据[6, 256]
     if(getB_from_bluetooth()){
-      if(decodeB_data()){
-        sendB_to_gestRecog();
-      }else{
-          cout << "decoding gest_data failed." << endl;
-      }
+        if(decodeB_data()){
+            sendB_to_gestRecog();
+//            while(1){//todo
+//                if(pBuf[0]=='w'){
+//                Sleep(8000);
+                    send_B_order(pBuf);
+//                    break;
+//                }
+//            }
+
+//            sendB_to_gestRecog();
+        }else{
+            cout << "decoding gest_data failed." << endl;
+        }
     }else{
         cout << "data not gotten from bluetooth." << endl;
     }
     return;
-}
+    }
 
 #endif

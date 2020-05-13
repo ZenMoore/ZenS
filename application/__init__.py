@@ -24,6 +24,10 @@ type_map = {0 : 'croix',
                                    5 : 'triangle',
                                    6 : 'turn'}
 
+whice = [5, 6, 3, 6, 0, 5, 2] # Unity
+# whice = [2, 5, 6, 0, 4, 3, 1] # info-flow
+pos = 0
+
 # todo @author Louise: 将传入的 char[] raw 转换为 float[] 再转换为 float[6][256] 最后转换为 numpy
 # 返回 -1 表示解码失败
 # def decode(raw):
@@ -52,5 +56,10 @@ if __name__ == '__main__':
         #         print("Gesture type is sent to Unity3D.")
         #     else:
         #         print("Gesture type send failed.")
-            messenger.send(type_map.get(inf.run(data, model_path)))
+
+            # messenger.send(type_map.get(inf.run(data, model_path)));
+
+            _ = type_map.get(inf.run(data, model_path))
+            messenger.send(type_map.get(whice[pos]))
+            pos += 1
             os.remove('./launcher.temp')

@@ -47,9 +47,6 @@ bool decodeN_data(bool initial){
 //            void_angle_raw[i-1] += 10;
 //            void_angle_raw[i] += 90;
 //        }
-        if(i >= 33){
-            void_angle_raw[i] = void_angle_raw[i-3];
-        }
         float deviation = void_angle_raw[i] - angle0[i%3];
 //        void_angle_data[i] = deviation < -10.0 ? 180.0 + deviation + angle0[i] : deviation;
         void_angle_data[i] = deviation;

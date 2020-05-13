@@ -6,7 +6,7 @@ from openpyxl.workbook import Workbook
 import openpyxl
 
 SEQUENCE_LEN = 256
-DIR_PATH = '../application/datagotten'
+DIR_PATH = '../application/data_gotten'
 OUT_PATH = '../dataset/due/'
 
 # 将(6,?)的numpy转变为(6,256)的numpy

@@ -18,6 +18,7 @@ SerialPort w;
 float rec_float[6][400];
 float rec_angle[36]={0};
 char order = 'P'; //用于存储接受到的命令
+int pos = 0;//todo dataset
 
 // 从这里获取单片机传来的按钮信息
 // 如果有按按钮的话，单片机传来的数据以一个字符char打头，分别为'A', 'B'
@@ -83,10 +84,11 @@ int main(){
                 case 'C':
                     initial=true;
                     cout<<"get C"<<endl;
-                    Sleep(10000) ;//
+                    Sleep(4000) ;//
                     break;
                 case 'T':
-                    run_B_to_gestRecog_demo();
+                    run_B_to_gestRecog_demo(pBuf);
+                    pos++;
                     break;
                     //B的数据传输结束后使用
                 default:
